@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gheorghe Chirica - Interactive Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s ease infinite;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-3px);
+            color: #4ecdc4;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: width 0.3s ease;
+        }
+
+        .card:hover .section-title::after {
+            width: 100%;
+        }
+
+        .experience-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .experience-item:hover {
+            border-left-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.05);
+            transform: translateX(10px);
+        }
+
+        .job-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .company-info {
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .job-description {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .skill-category h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .summary {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+            position: relative;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .print-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #4ecdc4;
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .card {
+                background: white;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                animation: none;
+            }
+            
+            .header {
+                background: white;
+                border: 1px solid #ddd;
+            }
+            
+            .header h1 {
+                -webkit-text-fill-color: black;
+                background: none;
+            }
+            
+            .print-button {
+                display: none;
+            }
+            
+            .floating-particles {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>GHEORGHE CHIRICA</h1>
+            <div class="subtitle">Strategic Entrepreneur & Tech Innovator</div>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📍</span>
+                    <span>Chișinău, Moldova</span>
+                </div>
+                <div class="contact-item">
+                    <span>📧</span>
+                    <span>Chiricag72@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span>📞</span>
+                    <span>+3736847523</span>
+                </div>
+                <div class="contact-item">
+                    <span>🎯</span>
+                    <span>16 years old</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Professional Summary</h2>
+            <div class="summary">
+                Strategic young entrepreneur with proven experience in educational technology, business consulting, and digital content creation. Founder of LearnZy, an innovative EdTech startup focused on personalized learning solutions. Demonstrated expertise in business development, market research, and creating scalable systems that address real market needs. Passionate about leveraging technology to solve educational challenges and drive meaningful impact.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Co-Founder & CEO</div>
+                        <div class="company-info">LearnZy EdTech Startup, Chișinău | April 2025 – Present</div>
+                        <div class="job-description">
+                            Built comprehensive learning platform featuring AI-powered personalized tutoring, adaptive test simulations, and detailed parent progress reports. Established sustainable subscription model generating 250 MDL monthly per student. Led strategic business development, investor pitching, and user feedback implementation. Collaborated with technical co-founder to drive market entry and accelerate business growth.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Freelance Business Consultant</div>
+                        <div class="company-info">Remote | June 2025 – Present</div>
+                        <div class="job-description">
+                            Provided strategic guidance to early-stage entrepreneurs on pricing optimization, revenue model development, and business structure design. Specialized in education technology, productivity tools, and student-focused ventures. Delivered high-value consultations to build professional experience and establish industry reputation.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Investigative Writer & Content Creator</div>
+                        <div class="company-info">Remote | 2024 – Present</div>
+                        <div class="job-description">
+                            Authored in-depth investigative and educational articles analyzing business personalities and modern marketing tactics. Specialized in exposing misleading online practices and analyzing psychological marketing techniques. Combined extensive research with critical thinking to produce well-documented, high-impact content.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Web Developer & Digital Solutions Architect</div>
+                        <div class="company-info">Remote | 2024 – Present</div>
+                        <div class="job-description">
+                            Developed custom productivity tools and web applications using modern technologies. Created automated workflows and digital solutions for various clients. Managed projects from concept to deployment with strong focus on user experience and functionality optimization.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Education</h2>
+            <div class="experience-item">
+                <div class="job-title">High School Student - Advanced Track</div>
+                <div class="company-info">Chișinău, Republic of Moldova | Expected Graduation: 2026</div>
+                <div class="job-description">
+                    Concentrated studies in Mathematics, Computer Science, and Entrepreneurship. Active participant in startup competitions and independent learning initiatives. Consistently maintaining high academic performance while managing business ventures.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Business & Strategy</h3>
+                    <div class="skill-tag">Startup Development</div>
+                    <div class="skill-tag">Revenue Optimization</div>
+                    <div class="skill-tag">Market Research</div>
+                    <div class="skill-tag">Business Consulting</div>
+                    <div class="skill-tag">Investor Pitching</div>
+                </div>
+                <div class="skill-category">
+                    <h3>Technical Skills</h3>
+                    <div class="skill-tag">Web Development</div>
+                    <div class="skill-tag">JavaScript</div>
+                    <div class="skill-tag">HTML/CSS</div>
+                    <div class="skill-tag">Digital Design</div>
+                    <div class="skill-tag">Automation</div>
+                </div>
+                <div class="skill-category">
+                    <h3>Creative & Communication</h3>
+                    <div class="skill-tag">Investigative Writing</div>
+                    <div class="skill-tag">Content Creation</div>
+                    <div class="skill-tag">Research Analysis</div>
+                    <div class="skill-tag">Translation</div>
+                    <div class="skill-tag">Visual Design</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Personal Attributes</h2>
+            <div class="summary">
+                Strategic thinker with exceptional analytical and leadership capabilities. Fast learner with high adaptability to new environments and emerging technologies. Focused on building scalable systems and achieving measurable results. Active participant in professional communities and knowledge-sharing platforms. Driven by continuous learning and innovation in technology and business.
+            </div>
+        </div>
+    </div>
+
+    <button class="print-button" onclick="window.print()">
+        🖨️ Print PDF
+    </button>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Animate cards on scroll
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = '0s';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add click effects to skill tags
+        document.querySelectorAll('.skill-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.style.animation = 'pulse 0.5s ease';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 500);
+            });
+        });
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            animateOnScroll();
+        });
+
+        // Add typing effect to name
+        function typeWriter() {
+            const nameElement = document.querySelector('.header h1');
+            const text = nameElement.textContent;
+            nameElement.textContent = '';
+            
+            let i = 0;
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    nameElement.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
+                }
+            }, 100);
+        }
+
+        // Add parallax effect to header
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.header');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add mouse tracking effect
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const deltaX = (x - centerX) / centerX;
+                    const deltaY = (y - centerY) / centerY;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${deltaY * 5}deg) rotateY(${deltaX * 5}deg) translateZ(10px)`;
+                }
+            });
+        });
+
+        // Reset card transforms when mouse leaves
+        document.addEventListener('mouseleave', () => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+            });
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gheorghe Chirica - Interactive Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s ease infinite;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-3px);
+            color: #4ecdc4;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: width 0.3s ease;
+        }
+
+        .card:hover .section-title::after {
+            width: 100%;
+        }
+
+        .experience-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .experience-item:hover {
+            border-left-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.05);
+            transform: translateX(10px);
+        }
+
+        .job-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .company-info {
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .job-description {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .skill-category h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .summary {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+            position: relative;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .print-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #4ecdc4;
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .card {
+                background: white;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                animation: none;
+            }
+            
+            .header {
+                background: white;
+                border: 1px solid #ddd;
+            }
+            
+            .header h1 {
+                -webkit-text-fill-color: black;
+                background: none;
+            }
+            
+            .print-button {
+                display: none;
+            }
+            
+            .floating-particles {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>GHEORGHE CHIRICA</h1>
+            <div class="subtitle">Strategic Entrepreneur & Tech Innovator</div>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📍</span>
+                    <span>Chișinău, Moldova</span>
+                </div>
+                <div class="contact-item">
+                    <span>📧</span>
+                    <span>Chiricag72@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span>📞</span>
+                    <span>+3736847523</span>
+                </div>
+                <div class="contact-item">
+                    <span>🎯</span>
+                    <span>16 years old</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Professional Summary</h2>
+            <div class="summary">
+                Strategic young entrepreneur with proven experience in educational technology, business consulting, and digital content creation. Founder of LearnZy, an innovative EdTech startup focused on personalized learning solutions. Demonstrated expertise in business development, market research, and creating scalable systems that address real market needs. Passionate about leveraging technology to solve educational challenges and drive meaningful impact.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Co-Founder & CEO</div>
+                        <div class="company-info">LearnZy EdTech Startup, Chișinău | April 2025 – Present</div>
+                        <div class="job-description">
+                            Built comprehensive learning platform featuring AI-powered personalized tutoring, adaptive test simulations, and detailed parent progress reports. Established sustainable subscription model generating 250 MDL monthly per student. Led strategic business development, investor pitching, and user feedback implementation. Collaborated with technical co-founder to drive market entry and accelerate business growth.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Freelance Business Consultant</div>
+                        <div class="company-info">Remote | June 2025 – Present</div>
+                        <div class="job-description">
+                            Provided strategic guidance to early-stage entrepreneurs on pricing optimization, revenue model development, and business structure design. Specialized in education technology, productivity tools, and student-focused ventures. Delivered high-value consultations to build professional experience and establish industry reputation.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Investigative Writer & Content Creator</div>
+                        <div class="company-info">Remote | 2024 – Present</div>
+                        <div class="job-description">
+                            Authored in-depth investigative and educational articles analyzing business personalities and modern marketing tactics. Specialized in exposing misleading online practices and analyzing psychological marketing techniques. Combined extensive research with critical thinking to produce well-documented, high-impact content.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="experience-item">
+                        <div class="job-title">Web Developer & Digital Solutions Architect</div>
+                        <div class="company-info">Remote | 2024 – Present</div>
+                        <div class="job-description">
+                            Developed custom productivity tools and web applications using modern technologies. Created automated workflows and digital solutions for various clients. Managed projects from concept to deployment with strong focus on user experience and functionality optimization.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Education</h2>
+            <div class="experience-item">
+                <div class="job-title">High School Student - Advanced Track</div>
+                <div class="company-info">Chișinău, Republic of Moldova | Expected Graduation: 2026</div>
+                <div class="job-description">
+                    Concentrated studies in Mathematics, Computer Science, and Entrepreneurship. Active participant in startup competitions and independent learning initiatives. Consistently maintaining high academic performance while managing business ventures.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Business & Strategy</h3>
+                    <div class="skill-tag">Startup Development</div>
+                    <div class="skill-tag">Revenue Optimization</div>
+                    <div class="skill-tag">Market Research</div>
+                    <div class="skill-tag">Business Consulting</div>
+                    <div class="skill-tag">Investor Pitching</div>
+                </div>
+                <div class="skill-category">
+                    <h3>Technical Skills</h3>
+                    <div class="skill-tag">Web Development</div>
+                    <div class="skill-tag">JavaScript</div>
+                    <div class="skill-tag">HTML/CSS</div>
+                    <div class="skill-tag">Digital Design</div>
+                    <div class="skill-tag">Automation</div>
+                </div>
+                <div class="skill-category">
+                    <h3>Creative & Communication</h3>
+                    <div class="skill-tag">Investigative Writing</div>
+                    <div class="skill-tag">Content Creation</div>
+                    <div class="skill-tag">Research Analysis</div>
+                    <div class="skill-tag">Translation</div>
+                    <div class="skill-tag">Visual Design</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Personal Attributes</h2>
+            <div class="summary">
+                Strategic thinker with exceptional analytical and leadership capabilities. Fast learner with high adaptability to new environments and emerging technologies. Focused on building scalable systems and achieving measurable results. Active participant in professional communities and knowledge-sharing platforms. Driven by continuous learning and innovation in technology and business.
+            </div>
+        </div>
+    </div>
+
+    <button class="print-button" onclick="window.print()">
+        🖨️ Print PDF
+    </button>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Animate cards on scroll
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = '0s';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add click effects to skill tags
+        document.querySelectorAll('.skill-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.style.animation = 'pulse 0.5s ease';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 500);
+            });
+        });
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            animateOnScroll();
+        });
+
+        // Add typing effect to name
+        function typeWriter() {
+            const nameElement = document.querySelector('.header h1');
+            const text = nameElement.textContent;
+            nameElement.textContent = '';
+            
+            let i = 0;
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    nameElement.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
+                }
+            }, 100);
+        }
+
+        // Add parallax effect to header
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.header');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add mouse tracking effect
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const deltaX = (x - centerX) / centerX;
+                    const deltaY = (y - centerY) / centerY;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${deltaY * 5}deg) rotateY(${deltaX * 5}deg) translateZ(10px)`;
+                }
+            });
+        });
+
+        // Reset card transforms when mouse leaves
+        document.addEventListener('mouseleave', () => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+            });
+        });
+    </script>
+</body>
+</html>
